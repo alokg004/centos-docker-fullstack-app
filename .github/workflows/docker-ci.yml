@@ -1,0 +1,22 @@
+name: Docker Full-Stack CI
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Build and Start Multi-Container Stack
+        run: docker compose up -d --build
+
+      - name: Verify Running Containers
+        run: |
+          sleep 5
+          docker compose ps
+          curl -f http://localhost:5000
+          curl -f http://localhost:8080
